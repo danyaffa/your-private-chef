@@ -25,13 +25,26 @@ const services = [
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("Failed");
       setSubmitted(true);
       setEmail("");
       setTimeout(() => setSubmitted(false), 4000);
+    } catch {
+      // silently fail for newsletter
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -67,7 +80,7 @@ export default function Footer() {
                 type="submit"
                 className="flex-shrink-0 px-6 py-3 bg-white text-gold font-semibold rounded-full hover:bg-cream active:scale-95 transition-all duration-200 text-sm shadow-md whitespace-nowrap"
               >
-                {submitted ? "Thank You!" : "Get Plan"}
+                {submitted ? "Thank You!" : submitting ? "..." : "Get Plan"}
               </button>
             </form>
           </div>
