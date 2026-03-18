@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        cream: "#FFF8F0",
+        cream: "#F5F0EB",
         warmWhite: "#FFFDF9",
         gold: "#C8986E",
         goldLight: "#E8C9A0",
@@ -19,12 +19,18 @@ module.exports = {
         terracottaLight: "#E8A88A",
         warm: "#8B6F4E",
         warmLight: "#A68B6B",
-        charcoal: "#3D3D3D",
-        softBrown: "#6B5B4E",
+        charcoal: "#1C1C1C",
+        softBrown: "#A09688",
+        darkBg: "#1C1C1C",
+        darkCard: "#242424",
+        darkBorder: "#3A3530",
       },
       fontFamily: {
-        serif: ["Georgia", "Cambria", "serif"],
+        serif: ["'Playfair Display'", "Georgia", "Cambria", "serif"],
         sans: ["Inter", "system-ui", "sans-serif"],
+      },
+      letterSpacing: {
+        ultrawide: "0.35em",
       },
     },
   },

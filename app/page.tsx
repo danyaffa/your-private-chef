@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import TestimonialCard from "../components/TestimonialCard";
+import { useState, useEffect } from "react";
 
 /* ------------------------------------------------------------------ */
 /*  Animation variants                                                 */
@@ -13,97 +12,52 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.12, duration: 0.6, ease: "easeOut" },
+    transition: { delay: i * 0.15, duration: 0.7, ease: "easeOut" },
   }),
 };
 
 const staggerContainer = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.15 } },
 };
 
 /* ------------------------------------------------------------------ */
-/*  Data                                                               */
+/*  Constants                                                          */
 /* ------------------------------------------------------------------ */
+const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
+const THIRD_SPACE_URL = "https://www.thethirdspaceatlanta.com";
+
+const foodPhotos = [
+  "0203DA92-08DA-4CD5-9F13-169870BBB71B.JPG",
+  "10664B13-450C-4728-BEDE-F9087E2B335B.JPG",
+  "4D9736A4-B0EF-45F9-A571-D699521FF774.JPG",
+  "74B6B138-A94D-44CE-9023-378C9AB53565.JPG",
+  "8967B85D-8AA1-4C0D-B806-12B0B8E5C867.JPG",
+  "9504B70E-D13D-4A95-A443-75F4FDE93E96.JPG",
+  "B13B53D7-0036-44E9-9F58-D112B1B57323.JPG",
+  "D0E5EFCE-47A0-4F97-844E-32BB5D3EB7B5.JPG",
+  "F3075F03-F88F-4451-8E87-95C4BB56D49F.JPG",
+  "F84A51B8-0E50-47FF-AFBA-0943FF2EAFAA.JPG",
+];
+
 const steps = [
   {
     num: 1,
-    icon: "🎨",
-    title: "Choose Your Style",
-    desc: "Health-focused, gourmet, high-protein, keto, Mediterranean — pick what suits your lifestyle.",
+    icon: "📞",
+    title: "Book a Call",
+    desc: "Schedule a free 15-minute consultation. We\u2019ll learn about your preferences, dietary needs, and schedule.",
   },
   {
     num: 2,
-    icon: "📝",
-    title: "Submit Preferences",
-    desc: "Tell us your dietary needs, allergies, flavor preferences, and calorie goals.",
+    icon: "👨‍🍳",
+    title: "Meet Chef Shai",
+    desc: "Join Shai at The Third Space Restaurant (or via Zoom) for a personal tasting and to plan your custom menu.",
   },
   {
     num: 3,
-    icon: "👨‍🍳",
-    title: "Chef Prepares",
-    desc: "Our professional chef crafts your meals in our licensed kitchen with fresh, quality ingredients.",
-  },
-  {
-    num: 4,
-    icon: "🚗",
-    title: "Delivered Fresh",
-    desc: "Meals arrive at your door, perfectly packaged and ready to heat and enjoy.",
-  },
-];
-
-const featuredOptions = [
-  {
-    icon: "📅",
-    title: "Weekly Meal Plans",
-    desc: "Curated weekly menus tailored to your goals. Save time, eat well, and never wonder what's for dinner again.",
-    gradient: "from-[#FFF8F0] to-[#F5E6D3]",
-    href: "/menu",
-  },
-  {
     icon: "🍽️",
-    title: "One-Time Gourmet Orders",
-    desc: "Special occasion or just craving something extraordinary? Order a single gourmet meal whenever you like.",
-    gradient: "from-[#FFF8F0] to-[#E8D5C4]",
-    href: "/order",
-  },
-  {
-    icon: "🥗",
-    title: "Health-Focused Meals",
-    desc: "Balanced macros, whole ingredients, and chef-level flavor. Eating healthy has never tasted this good.",
-    gradient: "from-[#F0F7F1] to-[#D9EAD9]",
-    href: "/menu",
-  },
-  {
-    icon: "💊",
-    title: "Custom Diet Support",
-    desc: "GLP-1 friendly, high-protein, low-carb, post-surgery soft foods — we build meals around your medical and wellness needs.",
-    gradient: "from-[#FFF5F0] to-[#F5DDD3]",
-    href: "/meal-builder",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Sarah M.",
-    quote:
-      "I lost 32 pounds in four months without ever feeling like I was on a diet. The food is restaurant-quality and my energy levels have never been higher.",
-    rating: 5,
-    transformation: "Lost 32 lbs in 4 months",
-  },
-  {
-    name: "James R.",
-    quote:
-      "As someone on GLP-1 medication, finding the right meals was a struggle. Your Private Chef made it effortless — perfectly portioned, nutrient-dense, and absolutely delicious.",
-    rating: 5,
-    transformation: "GLP-1 journey made easy",
-  },
-  {
-    name: "Priya K.",
-    quote:
-      "I used to spend my entire Sunday meal prepping. Now I get chef-prepared meals delivered and have my weekends back. My whole family loves the food.",
-    rating: 5,
-    transformation: "Reclaimed 8+ hours per week",
+    title: "Fresh to Your Door",
+    desc: "Receive your personally crafted meals delivered weekly — plated and ready to enjoy.",
   },
 ];
 
@@ -111,150 +65,159 @@ const testimonials = [
 /*  Page Component                                                     */
 /* ------------------------------------------------------------------ */
 export default function HomePage() {
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [availableSpots, setAvailableSpots] = useState(6);
+  const [lightboxPhoto, setLightboxPhoto] = useState<string | null>(null);
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubmitted(true);
-      setEmail("");
-      setTimeout(() => setSubmitted(false), 4000);
-    }
-  };
+  useEffect(() => {
+    const fetchSpots = async () => {
+      try {
+        const res = await fetch("/api/admin/availability");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.spots !== undefined) setAvailableSpots(data.spots);
+        }
+      } catch {
+        // Use default
+      }
+    };
+    fetchSpots();
+  }, []);
 
   return (
     <>
       {/* ============================================================ */}
       {/*  HERO SECTION                                                */}
       {/* ============================================================ */}
-      <section className="hero-gradient relative overflow-hidden">
-        {/* Subtle decorative circles */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#C8986E]/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 -left-24 w-80 h-80 rounded-full bg-[#7A9E7E]/10 blur-3xl pointer-events-none" />
+      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src={`/food-photos/${foodPhotos[0]}`}
+            alt="Chef Shai's cuisine"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left — Copy */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="text-center lg:text-left"
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.h1
+              custom={0}
+              variants={fadeUp}
+              className="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-[1.1] tracking-wide"
+              style={{ fontVariant: "small-caps" }}
             >
-              <motion.h1
-                custom={0}
-                variants={fadeUp}
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-charcoal leading-[1.1] tracking-tight"
-              >
-                Your Private Chef{" "}
-                <span className="text-gold">— Delivered</span>
-              </motion.h1>
+              Your Private Chef
+              <span className="block text-gold mt-2">— Delivered</span>
+            </motion.h1>
 
-              <motion.p
-                custom={1}
-                variants={fadeUp}
-                className="mt-5 sm:mt-6 text-lg sm:text-xl text-softBrown max-w-xl mx-auto lg:mx-0 leading-relaxed"
-              >
-                Custom meals, prepared in our professional kitchen, crafted just
-                for you. Healthy, delicious, and delivered fresh to your door.
-              </motion.p>
-
-              <motion.div
-                custom={2}
-                variants={fadeUp}
-                className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              >
-                <Link
-                  href="/order"
-                  className="inline-flex items-center justify-center gap-2 bg-gold hover:bg-goldDark text-white font-semibold px-8 py-4 rounded-2xl text-lg transition-colors shadow-lg shadow-gold/25 hover:shadow-xl hover:shadow-gold/30"
-                >
-                  Order Your Meal
-                  <span aria-hidden="true">→</span>
-                </Link>
-                <Link
-                  href="/meal-builder"
-                  className="inline-flex items-center justify-center gap-2 border-2 border-gold text-gold hover:bg-gold hover:text-white font-semibold px-8 py-4 rounded-2xl text-lg transition-all"
-                >
-                  Build AI Meal Plan
-                  <span aria-hidden="true">✨</span>
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Right — Decorative food illustration */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-              className="flex justify-center lg:justify-end"
+            <motion.p
+              custom={1}
+              variants={fadeUp}
+              className="mt-6 sm:mt-8 text-lg sm:text-xl text-cream/80 max-w-2xl mx-auto leading-relaxed"
             >
-              <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-[#C8986E]/20 via-[#E8C9A0]/30 to-[#C67D5B]/20 flex items-center justify-center shadow-2xl shadow-gold/10">
-                {/* Inner circle */}
-                <div className="w-56 h-56 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-gradient-to-br from-white/80 to-[#FFF8F0] flex flex-col items-center justify-center shadow-inner">
-                  <span className="text-6xl sm:text-7xl md:text-8xl" role="img" aria-label="Fork and knife">
-                    🍽️
-                  </span>
-                  <p className="font-serif text-gold text-lg sm:text-xl font-semibold mt-3 tracking-wide">
-                    Chef Crafted
-                  </p>
-                  <p className="text-softBrown text-sm mt-1">
-                    Fresh &bull; Local &bull; Yours
-                  </p>
-                </div>
+              Private chef meals by Shai Lavi — personally crafted, locally
+              sourced, and delivered fresh to your door.
+            </motion.p>
 
-                {/* Floating accents */}
-                <motion.span
-                  className="absolute top-4 right-8 text-3xl sm:text-4xl"
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                >
-                  🌿
-                </motion.span>
-                <motion.span
-                  className="absolute bottom-8 left-4 text-3xl sm:text-4xl"
-                  animate={{ y: [0, 8, 0] }}
-                  transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
-                >
-                  🍋
-                </motion.span>
-                <motion.span
-                  className="absolute top-1/2 -left-2 text-2xl sm:text-3xl"
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut", delay: 1 }}
-                >
-                  🫒
-                </motion.span>
-              </div>
+            <motion.div
+              custom={2}
+              variants={fadeUp}
+              className="mt-10 sm:mt-12"
+            >
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+              >
+                Book Time with Shai
+              </a>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* ============================================================ */}
-      {/*  HOW IT WORKS                                                */}
+      {/*  THE EXPERIENCE                                              */}
       {/* ============================================================ */}
-      <section className="bg-white py-16 sm:py-20 lg:py-24">
+      <section id="the-experience" className="bg-darkBg py-20 sm:py-24 lg:py-32">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={staggerContainer}
+            className="text-center"
+          >
+            <motion.p custom={0} variants={fadeUp} className="text-gold font-medium text-sm uppercase tracking-ultrawide mb-4">
+              The Experience
+            </motion.p>
+            <motion.h2
+              custom={1}
+              variants={fadeUp}
+              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-cream mb-10"
+              style={{ fontVariant: "small-caps" }}
+            >
+              This Isn&apos;t Meal Prep
+            </motion.h2>
+            <motion.div custom={2} variants={fadeUp} className="text-cream/70 text-lg sm:text-xl leading-relaxed max-w-3xl mx-auto space-y-6">
+              <p>
+                This is your personal chef — designing menus around your tastes,
+                your dietary needs, your life. Every dish is prepared by Chef Shai
+                Lavi using seasonal, locally sourced ingredients and delivered fresh
+                to your door weekly.
+              </p>
+              <p>
+                Because every client is different, we start with a conversation. No
+                online ordering — just a 15-minute call to understand what you&apos;re
+                looking for, followed by an in-person tasting meeting at{" "}
+                <a
+                  href={THIRD_SPACE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold hover:text-goldLight underline underline-offset-4 decoration-gold/40 transition-colors"
+                >
+                  The Third Space
+                </a>{" "}
+                (or via Zoom if needed).
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/*  HOW IT WORKS — 3 STEPS                                     */}
+      {/* ============================================================ */}
+      <section className="bg-darkCard py-20 sm:py-24 lg:py-32 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
             variants={staggerContainer}
-            className="text-center mb-12 lg:mb-16"
+            className="text-center mb-16"
           >
-            <motion.p custom={0} variants={fadeUp} className="text-gold font-semibold text-sm uppercase tracking-widest mb-3">
+            <motion.p custom={0} variants={fadeUp} className="text-gold font-medium text-sm uppercase tracking-ultrawide mb-4">
               Simple Process
             </motion.p>
             <motion.h2
               custom={1}
               variants={fadeUp}
-              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal"
+              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-cream"
+              style={{ fontVariant: "small-caps" }}
             >
               How It Works
             </motion.h2>
-            <motion.p custom={2} variants={fadeUp} className="mt-4 text-softBrown max-w-2xl mx-auto text-lg">
-              From your preferences to your plate in four easy steps.
+            <motion.p custom={2} variants={fadeUp} className="mt-4 text-cream/60 max-w-2xl mx-auto text-lg">
+              From your first call to meals at your table — three simple steps.
             </motion.p>
           </motion.div>
 
@@ -263,7 +226,7 @@ export default function HomePage() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={staggerContainer}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
+            className="grid sm:grid-cols-3 gap-8 lg:gap-12"
           >
             {steps.map((step, i) => (
               <motion.div
@@ -272,28 +235,47 @@ export default function HomePage() {
                 variants={fadeUp}
                 className="relative text-center group"
               >
-                {/* Connector line (hidden on mobile, visible on lg) */}
+                {/* Connector line */}
                 {i < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-[60%] w-[calc(100%-20%)] h-[2px] bg-gradient-to-r from-gold/40 to-gold/10" />
+                  <div className="hidden sm:block absolute top-10 left-[60%] w-[calc(100%-20%)] h-[1px] bg-gradient-to-r from-gold/30 to-transparent" />
                 )}
 
-                {/* Number circle */}
-                <div className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-gold to-goldDark flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-gold/20 mb-5 relative z-10 group-hover:scale-110 transition-transform duration-300">
+                {/* Number */}
+                <div className="mx-auto w-20 h-20 border border-gold/40 flex items-center justify-center text-gold text-2xl font-serif font-bold mb-6 relative z-10 group-hover:bg-gold/10 transition-all duration-300">
                   {step.num}
                 </div>
 
-                {/* Icon */}
-                <span className="text-3xl block mb-3">{step.icon}</span>
+                <span className="text-3xl block mb-4">{step.icon}</span>
 
-                {/* Title */}
-                <h3 className="font-serif text-xl font-semibold text-charcoal mb-2">
+                <h3 className="font-serif text-xl font-semibold text-cream mb-3 tracking-wide">
                   {step.title}
                 </h3>
 
-                {/* Description */}
-                <p className="text-softBrown text-sm leading-relaxed max-w-xs mx-auto">
+                <p className="text-cream/60 text-sm leading-relaxed max-w-xs mx-auto">
                   {step.desc}
                 </p>
+
+                {/* Step-specific links */}
+                {step.num === 1 && (
+                  <a
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-5 text-gold hover:text-goldLight font-medium text-sm tracking-wider uppercase transition-colors"
+                  >
+                    Schedule Now <span aria-hidden="true">→</span>
+                  </a>
+                )}
+                {step.num === 2 && (
+                  <a
+                    href={THIRD_SPACE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 mt-5 text-gold hover:text-goldLight font-medium text-sm tracking-wider uppercase transition-colors"
+                  >
+                    The Third Space <span aria-hidden="true">→</span>
+                  </a>
+                )}
               </motion.div>
             ))}
           </motion.div>
@@ -304,198 +286,160 @@ export default function HomePage() {
             viewport={{ once: true }}
             variants={fadeUp}
             custom={0}
-            className="text-center mt-12"
+            className="text-center mt-16"
           >
-            <Link
-              href="/how-it-works"
-              className="inline-flex items-center gap-2 text-gold hover:text-goldDark font-semibold text-lg transition-colors group"
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
             >
-              See full details
-              <span className="group-hover:translate-x-1 transition-transform" aria-hidden="true">
-                →
-              </span>
-            </Link>
+              Book Time with Shai
+            </a>
           </motion.div>
         </div>
       </section>
 
       {/* ============================================================ */}
-      {/*  FEATURED OPTIONS                                            */}
+      {/*  SCARCITY / URGENCY BANNER                                   */}
       {/* ============================================================ */}
-      <section className="bg-cream py-16 sm:py-20 lg:py-24 section-pattern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={staggerContainer}
-            className="text-center mb-12 lg:mb-16"
-          >
-            <motion.p custom={0} variants={fadeUp} className="text-sage font-semibold text-sm uppercase tracking-widest mb-3">
-              What We Offer
-            </motion.p>
-            <motion.h2
-              custom={1}
-              variants={fadeUp}
-              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal"
-            >
-              Featured Options
-            </motion.h2>
-            <motion.p custom={2} variants={fadeUp} className="mt-4 text-softBrown max-w-2xl mx-auto text-lg">
-              Whether you need weekly meals or a one-time feast, we have a plan that fits your life.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={staggerContainer}
-            className="grid sm:grid-cols-2 gap-6 lg:gap-8"
-          >
-            {featuredOptions.map((option, i) => (
-              <motion.div
-                key={option.title}
-                custom={i}
-                variants={fadeUp}
-                className={`bg-gradient-to-br ${option.gradient} rounded-3xl p-8 lg:p-10 border border-goldLight/20 shadow-sm hover:shadow-lg hover:shadow-gold/10 transition-all duration-300 group`}
-              >
-                <span className="text-4xl block mb-4">{option.icon}</span>
-                <h3 className="font-serif text-2xl font-semibold text-charcoal mb-3 group-hover:text-gold transition-colors">
-                  {option.title}
-                </h3>
-                <p className="text-softBrown leading-relaxed mb-6">
-                  {option.desc}
-                </p>
-                <Link
-                  href={option.href}
-                  className="inline-flex items-center gap-2 text-gold hover:text-goldDark font-semibold transition-colors group/link"
-                >
-                  Learn More
-                  <span className="group-hover/link:translate-x-1 transition-transform" aria-hidden="true">
-                    →
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/*  TESTIMONIALS                                                */}
-      {/* ============================================================ */}
-      <section className="bg-white py-16 sm:py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={staggerContainer}
-            className="text-center mb-12 lg:mb-16"
-          >
-            <motion.p custom={0} variants={fadeUp} className="text-terracotta font-semibold text-sm uppercase tracking-widest mb-3">
-              Real Results
-            </motion.p>
-            <motion.h2
-              custom={1}
-              variants={fadeUp}
-              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-charcoal"
-            >
-              What Our Clients Say
-            </motion.h2>
-            <motion.p custom={2} variants={fadeUp} className="mt-4 text-softBrown max-w-2xl mx-auto text-lg">
-              Real stories from people who transformed their health and lifestyle with our meals.
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={staggerContainer}
-            className="grid md:grid-cols-3 gap-6 lg:gap-8"
-          >
-            {testimonials.map((t, i) => (
-              <motion.div key={t.name} custom={i} variants={fadeUp}>
-                <TestimonialCard
-                  name={t.name}
-                  quote={t.quote}
-                  rating={t.rating}
-                  transformation={t.transformation}
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ============================================================ */}
-      {/*  EMAIL CAPTURE                                               */}
-      {/* ============================================================ */}
-      <section className="sage-gradient py-16 sm:py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-darkBg border-y border-darkBorder py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={staggerContainer}
           >
-            <motion.h2
+            <motion.p
               custom={0}
               variants={fadeUp}
-              className="font-serif text-3xl sm:text-4xl font-bold text-white mb-4"
+              className="text-gold font-medium text-sm uppercase tracking-ultrawide mb-4"
             >
-              Get Your Custom Meal Plan
-            </motion.h2>
-            <motion.p
+              Limited Availability
+            </motion.p>
+            <motion.h2
               custom={1}
               variants={fadeUp}
-              className="text-white/85 text-lg mb-8 max-w-xl mx-auto"
+              className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-cream mb-3"
+              style={{ fontVariant: "small-caps" }}
             >
-              Drop your email and we will send you a personalized meal plan
-              consultation — completely free. No spam, just delicious
-              possibilities.
-            </motion.p>
-            <motion.form
+              {availableSpots} Openings Available This Month
+            </motion.h2>
+            <motion.p
               custom={2}
               variants={fadeUp}
-              onSubmit={handleEmailSubmit}
-              className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
+              className="text-cream/50 text-lg mb-10"
             >
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
-                required
-                className="flex-1 px-5 py-4 rounded-2xl bg-white/95 text-charcoal placeholder:text-softBrown/50 focus:outline-none focus:ring-2 focus:ring-white/60 text-base shadow-sm"
-              />
-              <button
-                type="submit"
-                className="px-8 py-4 bg-gold hover:bg-goldDark text-white font-semibold rounded-2xl transition-colors shadow-lg shadow-gold/25 text-base whitespace-nowrap"
+              Secure your spot before they&apos;re gone.
+            </motion.p>
+            <motion.div custom={3} variants={fadeUp}>
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
               >
-                {submitted ? "Thank You! ✓" : "Get My Plan"}
-              </button>
-            </motion.form>
-            {submitted && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-white/90 mt-4 text-sm font-medium"
-              >
-                We will be in touch shortly with your personalized plan!
-              </motion.p>
-            )}
+                Book Your Consultation
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
       {/* ============================================================ */}
-      {/*  CTA BANNER                                                  */}
+      {/*  PHOTO GALLERY                                               */}
       {/* ============================================================ */}
-      <section className="bg-gradient-to-r from-[#C8986E] via-[#D4A87A] to-[#C67D5B] py-16 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="bg-darkCard py-20 sm:py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={staggerContainer}
+            className="text-center mb-16"
+          >
+            <motion.p custom={0} variants={fadeUp} className="text-gold font-medium text-sm uppercase tracking-ultrawide mb-4">
+              From Chef Shai&apos;s Kitchen
+            </motion.p>
+            <motion.h2
+              custom={1}
+              variants={fadeUp}
+              className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-cream"
+              style={{ fontVariant: "small-caps" }}
+            >
+              A Taste of What Awaits
+            </motion.h2>
+            <motion.p custom={2} variants={fadeUp} className="mt-4 text-cream/60 max-w-2xl mx-auto text-lg">
+              Every dish is crafted with care, using seasonal ingredients and
+              inspired by your personal preferences.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            variants={staggerContainer}
+            className="columns-2 md:columns-3 gap-4 space-y-4"
+          >
+            {foodPhotos.map((photo, i) => (
+              <motion.div
+                key={photo}
+                custom={i}
+                variants={fadeUp}
+                className="break-inside-avoid cursor-pointer group"
+                onClick={() => setLightboxPhoto(photo)}
+              >
+                <div className="relative overflow-hidden shadow-md hover:shadow-2xl hover:shadow-gold/10 transition-all duration-500">
+                  <Image
+                    src={`/food-photos/${photo}`}
+                    alt={`Chef Shai's dish ${i + 1}`}
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            custom={0}
+            className="text-center mt-16"
+          >
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+            >
+              Book Time with Shai
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============================================================ */}
+      {/*  FINAL CTA                                                   */}
+      {/* ============================================================ */}
+      <section className="relative py-20 sm:py-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src={`/food-photos/${foodPhotos[3]}`}
+            alt="Chef Shai's cuisine"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-black/70" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -506,29 +450,57 @@ export default function HomePage() {
               custom={0}
               variants={fadeUp}
               className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6"
+              style={{ fontVariant: "small-caps" }}
             >
-              Ready to eat like royalty?
+              Ready to Eat Like Royalty?
             </motion.h2>
             <motion.p
               custom={1}
               variants={fadeUp}
-              className="text-white/85 text-lg mb-8 max-w-2xl mx-auto"
+              className="text-cream/70 text-lg mb-10 max-w-2xl mx-auto"
             >
-              Let our chef prepare your next meal. Premium ingredients,
-              personalized recipes, delivered fresh.
+              It all starts with a 15-minute conversation. Let Chef Shai design
+              a menu that&apos;s uniquely yours.
             </motion.p>
             <motion.div custom={2} variants={fadeUp}>
-              <Link
-                href="/order"
-                className="inline-flex items-center justify-center gap-2 bg-white text-gold hover:bg-cream font-bold px-10 py-4 rounded-2xl text-lg transition-colors shadow-xl shadow-black/10 hover:shadow-2xl"
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
               >
-                Order Now
-                <span aria-hidden="true">→</span>
-              </Link>
+                Book Time with Shai
+              </a>
             </motion.div>
           </motion.div>
         </div>
       </section>
+
+      {/* ============================================================ */}
+      {/*  LIGHTBOX                                                    */}
+      {/* ============================================================ */}
+      {lightboxPhoto && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 cursor-pointer"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button
+            className="absolute top-6 right-6 text-cream/60 hover:text-cream text-4xl font-light transition-colors"
+            onClick={() => setLightboxPhoto(null)}
+            aria-label="Close lightbox"
+          >
+            &times;
+          </button>
+          <Image
+            src={`/food-photos/${lightboxPhoto}`}
+            alt="Chef Shai's dish"
+            width={1200}
+            height={800}
+            className="max-w-full max-h-[90vh] object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </>
   );
 }

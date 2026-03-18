@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import CouponPopup from "../components/CouponPopup";
+
 
 export const metadata: Metadata = {
   title: "Your Private Chef — Premium Meals Delivered",
@@ -47,11 +47,10 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#C8986E" />
       </head>
-      <body className="font-sans text-charcoal bg-cream antialiased">
+      <body className="font-sans text-cream bg-darkBg antialiased">
         <Navbar />
         <main className="pt-24 md:pt-[104px] xl:pt-16">{children}</main>
         <Footer />
-        <CouponPopup />
       </body>
     </html>
   );
