@@ -90,7 +90,6 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-cream/50">
               {[
                 { label: "About Us", href: "/about" },
-                { label: "How It Works", href: "/how-it-works" },
                 { label: "Gallery", href: "/gallery" },
                 { label: "Chef Shai", href: "/chef" },
               ].map((link) => (
