@@ -12,15 +12,15 @@
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Playfair+Display+SC:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --cream: #FFF8F0;
+  --cream: #F5F0EB;
   --gold: #C8986E;
   --gold-light: #E8C9A0;
-  --sage: #7A9E7E;
-  --terracotta: #C67D5B;
-  --charcoal: #3D3D3D;
+  --charcoal: #1C1C1C;
+  --dark-card: #242424;
+  --dark-border: #3A3530;
 }
 
 * {
@@ -33,32 +33,42 @@ html {
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #3D3D3D;
-  background-color: #FFF8F0;
+  color: #F5F0EB;
+  background-color: #1C1C1C;
   margin: 0;
   padding: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', Georgia, serif;
-  color: #3D3D3D;
+  color: #F5F0EB;
 }
 
+/* Dark hero gradient */
 .hero-gradient {
-  background: linear-gradient(135deg, #FFF8F0 0%, #F5E6D3 50%, #E8C9A0 100%);
+  background: linear-gradient(135deg, #1C1C1C 0%, #2A2520 50%, #1C1C1C 100%);
 }
 
 .gold-gradient {
   background: linear-gradient(135deg, #C8986E 0%, #E8C9A0 100%);
 }
 
-.sage-gradient {
-  background: linear-gradient(135deg, #7A9E7E 0%, #B5D4B8 100%);
+/* Subtle dark pattern */
+.section-pattern {
+  background-image: radial-gradient(circle at 1px 1px, rgba(200,152,110,0.08) 1px, transparent 0);
+  background-size: 40px 40px;
 }
 
-.section-pattern {
-  background-image: radial-gradient(circle at 1px 1px, #E8C9A0 1px, transparent 0);
-  background-size: 40px 40px;
+/* Elegant button styles */
+.btn-primary {
+  @apply bg-gold text-white font-semibold py-3 px-8
+    hover:bg-goldDark transition-all duration-300
+    shadow-lg hover:shadow-xl active:scale-95;
+}
+
+.btn-outline {
+  @apply border border-cream/40 text-cream font-medium py-3 px-8
+    hover:bg-cream/10 transition-all duration-300 tracking-wider uppercase text-sm;
 }
 
 .card-hover {
@@ -67,37 +77,20 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(200, 152, 110, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.btn-primary {
-  @apply bg-gold text-white font-semibold py-3 px-8 rounded-full
-    hover:bg-goldDark transition-all duration-300
-    shadow-lg hover:shadow-xl active:scale-95;
-}
-
-.btn-secondary {
-  @apply bg-sage text-white font-semibold py-3 px-8 rounded-full
-    hover:bg-sageDark transition-all duration-300
-    shadow-lg hover:shadow-xl active:scale-95;
-}
-
-.btn-outline {
-  @apply border-2 border-gold text-gold font-semibold py-3 px-8 rounded-full
-    hover:bg-gold hover:text-white transition-all duration-300;
-}
-
-/* Custom scrollbar */
+/* Custom scrollbar - dark theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFF8F0;
+  background: #1C1C1C;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #E8C9A0;
+  background: #3A3530;
   border-radius: 4px;
 }
 
@@ -132,7 +125,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Food image overlay */
 .food-card-overlay {
-  background: linear-gradient(to top, rgba(61, 61, 61, 0.7) 0%, transparent 60%);
+  background: linear-gradient(to top, rgba(28, 28, 28, 0.8) 0%, transparent 60%);
 }
 
 /* Form styles */
@@ -140,4 +133,10 @@ input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: #C8986E;
   box-shadow: 0 0 0 3px rgba(200, 152, 110, 0.2);
+}
+
+/* Small caps style for elegant headings */
+.font-smallcaps {
+  font-variant: small-caps;
+  letter-spacing: 0.25em;
 }

@@ -14,9 +14,10 @@ import {
   X,
   Save,
   DollarSign,
+  CalendarCheck,
 } from "lucide-react";
 
-type Tab = "menu" | "coupons" | "orders" | "hours";
+type Tab = "menu" | "coupons" | "orders" | "hours" | "availability";
 
 interface MenuItem {
   id: string;
@@ -92,6 +93,8 @@ export default function AdminPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [hours, setHours] = useState<HoursData>(DEFAULT_HOURS);
+  const [availableSpots, setAvailableSpots] = useState(6);
+  const [spotsSaved, setSpotsSaved] = useState(false);
   const [loading, setLoading] = useState(false);
 
   // Form states
@@ -161,6 +164,10 @@ export default function AdminPage() {
         const res = await fetch("/api/admin/hours", { headers: h });
         const data = await res.json();
         setHours(data.hours || DEFAULT_HOURS);
+      } else if (tab === "availability") {
+        const res = await fetch("/api/admin/availability");
+        const data = await res.json();
+        setAvailableSpots(data.spots ?? 6);
       }
     } catch {
       // silently handle
@@ -292,6 +299,17 @@ export default function AdminPage() {
     }));
   };
 
+  // ── Availability ──
+  const updateAvailability = async () => {
+    await fetch("/api/admin/availability", {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({ spots: availableSpots }),
+    });
+    setSpotsSaved(true);
+    setTimeout(() => setSpotsSaved(false), 3000);
+  };
+
   // ── Login Screen ──
   if (!authenticated) {
     return (
@@ -337,6 +355,7 @@ export default function AdminPage() {
     { key: "menu", label: "Menu & Prices", icon: <UtensilsCrossed className="w-4 h-4" /> },
     { key: "coupons", label: "Coupons", icon: <Tag className="w-4 h-4" /> },
     { key: "hours", label: "Hours", icon: <Clock className="w-4 h-4" /> },
+    { key: "availability", label: "Availability", icon: <CalendarCheck className="w-4 h-4" /> },
   ];
 
   return (
@@ -885,6 +904,54 @@ export default function AdminPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ═══ AVAILABILITY TAB ═══ */}
+        {tab === "availability" && !loading && (
+          <div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="font-serif text-2xl text-charcoal">
+                Monthly Availability
+              </h2>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-goldLight/20 p-6 max-w-md">
+              <p className="text-softBrown text-sm mb-4">
+                Set the number of available client openings shown on the
+                homepage scarcity banner. Update this monthly as availability
+                changes.
+              </p>
+
+              <label className="block text-sm font-medium text-charcoal mb-2">
+                Available Spots This Month
+              </label>
+              <div className="flex items-center gap-4">
+                <input
+                  type="number"
+                  min={0}
+                  max={99}
+                  value={availableSpots}
+                  onChange={(e) =>
+                    setAvailableSpots(Number(e.target.value))
+                  }
+                  className="w-24 px-4 py-3 rounded-xl border border-goldLight/40 bg-cream/30 text-charcoal text-lg font-bold text-center focus:outline-none focus:ring-2 focus:ring-gold/40"
+                />
+                <button
+                  onClick={updateAvailability}
+                  className="flex items-center gap-2 px-6 py-3 bg-gold text-white text-sm font-medium rounded-xl hover:bg-goldDark transition-colors"
+                >
+                  <Save className="w-4 h-4" />
+                  Save
+                </button>
+              </div>
+
+              {spotsSaved && (
+                <p className="text-sage text-sm mt-3 font-medium">
+                  Availability updated successfully!
+                </p>
+              )}
             </div>
           </div>
         )}
