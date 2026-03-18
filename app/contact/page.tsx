@@ -513,62 +513,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Map Placeholder ── */}
-      <section id="map" className="bg-warmWhite py-16 sm:py-24">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <motion.div
-            className="text-center mb-10"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
-            <motion.h2
-              className="font-serif text-3xl sm:text-4xl text-charcoal mb-2"
-              variants={fadeUp}
-              custom={0}
-            >
-              Find Us
-            </motion.h2>
-            <motion.p
-              className="text-softBrown font-sans"
-              variants={fadeUp}
-              custom={1}
-            >
-              The Third Space Kitchen &mdash; Atlanta, Georgia
-            </motion.p>
-          </motion.div>
-
-          <motion.div
-            className="relative w-full aspect-[16/7] sm:aspect-[16/6] rounded-2xl overflow-hidden shadow-xl"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={scaleIn}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-goldLight via-gold to-terracotta flex flex-col items-center justify-center">
-              <MapPin className="w-16 h-16 sm:w-20 sm:h-20 text-white/80 mb-3 animate-bounce" />
-              <span className="text-white font-serif text-xl sm:text-2xl">
-                Atlanta, GA
-              </span>
-              <span className="text-white/70 font-sans text-sm mt-1">
-                The Third Space Kitchen
-              </span>
-            </div>
-            {/* Decorative grid dots */}
-            <div className="absolute inset-0 opacity-10">
-              <div
-                className="w-full h-full"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)",
-                  backgroundSize: "24px 24px",
-                }}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* ── CTA Section ── */}
       <section className="py-16 sm:py-24">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Leaf,
   Heart,
@@ -122,8 +123,14 @@ export default function AboutPage() {
               transition={{ duration: 0.7 }}
               className="relative"
             >
-              <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-goldLight/60 to-gold/30 flex items-center justify-center overflow-hidden shadow-xl">
-                <ChefHat className="w-28 h-28 text-gold/50" />
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-xl relative">
+                <Image
+                  src="/About.png"
+                  alt="Your Private Chef"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 500px"
+                />
               </div>
               <div className="absolute -bottom-4 -right-4 w-32 h-32 rounded-xl bg-sage/20 -z-10" />
               <div className="absolute -top-4 -left-4 w-24 h-24 rounded-xl bg-terracotta/10 -z-10" />

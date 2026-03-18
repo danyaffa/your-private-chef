@@ -4,7 +4,7 @@ import { useState, FormEvent } from "react";
 
 type OrderType = "one-time" | "weekly" | "custom";
 type SpiceLevel = "mild" | "medium" | "spicy";
-type DeliveryTime = "morning" | "afternoon" | "evening";
+type DeliveryTime = string;
 
 interface FormData {
   name: string;
@@ -79,7 +79,7 @@ export default function OrderPage() {
     phone: "",
     address: "",
     deliveryDate: "",
-    deliveryTime: "morning",
+    deliveryTime: "12:00 PM",
     mealType: "High Protein",
     dietaryRestrictions: [],
     allergies: "",
@@ -240,7 +240,7 @@ export default function OrderPage() {
       phone: "",
       address: "",
       deliveryDate: "",
-      deliveryTime: "morning",
+      deliveryTime: "12:00 PM",
       mealType: "High Protein",
       dietaryRestrictions: [],
       allergies: "",
@@ -587,30 +587,45 @@ export default function OrderPage() {
                       <label className="block text-sm font-medium text-charcoal mb-1.5">
                         Delivery Time Preference
                       </label>
-                      <div className="flex gap-2">
-                        {(
-                          [
-                            { key: "morning", label: "Morning" },
-                            { key: "afternoon", label: "Afternoon" },
-                            { key: "evening", label: "Evening" },
-                          ] as const
-                        ).map((time) => (
-                          <button
-                            key={time.key}
-                            type="button"
-                            onClick={() =>
-                              updateField("deliveryTime", time.key)
-                            }
-                            className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                              form.deliveryTime === time.key
-                                ? "bg-gold text-white shadow-sm"
-                                : "bg-cream text-charcoal/60 hover:bg-goldLight/30"
-                            }`}
-                          >
-                            {time.label}
-                          </button>
-                        ))}
-                      </div>
+                      <select
+                        value={form.deliveryTime}
+                        onChange={(e) =>
+                          updateField("deliveryTime", e.target.value)
+                        }
+                        className="w-full px-4 py-3 rounded-xl border border-charcoal/15 bg-cream/50 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20 transition-colors appearance-none cursor-pointer"
+                      >
+                        <optgroup label="Morning">
+                          <option value="8:00 AM">8:00 AM</option>
+                          <option value="8:30 AM">8:30 AM</option>
+                          <option value="9:00 AM">9:00 AM</option>
+                          <option value="9:30 AM">9:30 AM</option>
+                          <option value="10:00 AM">10:00 AM</option>
+                          <option value="10:30 AM">10:30 AM</option>
+                          <option value="11:00 AM">11:00 AM</option>
+                          <option value="11:30 AM">11:30 AM</option>
+                        </optgroup>
+                        <optgroup label="Afternoon">
+                          <option value="12:00 PM">12:00 PM</option>
+                          <option value="12:30 PM">12:30 PM</option>
+                          <option value="1:00 PM">1:00 PM</option>
+                          <option value="1:30 PM">1:30 PM</option>
+                          <option value="2:00 PM">2:00 PM</option>
+                          <option value="2:30 PM">2:30 PM</option>
+                          <option value="3:00 PM">3:00 PM</option>
+                          <option value="3:30 PM">3:30 PM</option>
+                          <option value="4:00 PM">4:00 PM</option>
+                          <option value="4:30 PM">4:30 PM</option>
+                          <option value="5:00 PM">5:00 PM</option>
+                        </optgroup>
+                        <optgroup label="Evening">
+                          <option value="5:30 PM">5:30 PM</option>
+                          <option value="6:00 PM">6:00 PM</option>
+                          <option value="6:30 PM">6:30 PM</option>
+                          <option value="7:00 PM">7:00 PM</option>
+                          <option value="7:30 PM">7:30 PM</option>
+                          <option value="8:00 PM">8:00 PM</option>
+                        </optgroup>
+                      </select>
                     </div>
                   </div>
                 </div>

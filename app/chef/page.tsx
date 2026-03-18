@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ChefHat,
   Award,
@@ -59,7 +60,7 @@ export default function ChefPage() {
             variants={fadeUp}
             custom={1}
           >
-            Meet Your Chef
+            Meet Chef Shai
           </motion.h1>
           <motion.p
             className="mt-4 max-w-2xl mx-auto text-goldLight/80 text-lg sm:text-xl font-sans"
@@ -68,7 +69,7 @@ export default function ChefPage() {
             variants={fadeUp}
             custom={2}
           >
-            Passion, precision, and a personal touch in every bite
+            Mediterranean soul, modern vision, and a warm hug in every bite
           </motion.p>
         </div>
       </section>
@@ -85,17 +86,20 @@ export default function ChefPage() {
             variants={scaleIn}
           >
             <div className="relative mx-auto w-full max-w-md aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-gold via-terracotta to-sage flex items-center justify-center">
-                <span className="text-[120px] sm:text-[160px] select-none">
-                  👨‍🍳
-                </span>
-              </div>
+              <Image
+                src="/Chef_Shai.png"
+                alt="Chef Shai"
+                fill
+                className="object-cover"
+                priority
+                sizes="(max-width: 768px) 100vw, 400px"
+              />
             </div>
             {/* Floating badge */}
             <div className="absolute -bottom-4 -right-2 sm:right-4 bg-white rounded-xl shadow-lg px-5 py-3 flex items-center gap-2">
               <Clock className="w-5 h-5 text-terracotta" />
               <span className="font-sans text-charcoal font-semibold text-sm">
-                15+ Years Experience
+                Culinary Visionary
               </span>
             </div>
           </motion.div>
@@ -118,14 +122,14 @@ export default function ChefPage() {
               variants={fadeUp}
               custom={1}
             >
-              Chef Marcus
+              Chef Shai
             </motion.h2>
             <motion.p
               className="mt-1 text-gold font-sans font-medium"
               variants={fadeUp}
               custom={2}
             >
-              Inspired by The Third Space Atlanta
+              Your Private Chef &mdash; Atlanta, GA
             </motion.p>
             <motion.div
               className="mt-6 space-y-4 text-softBrown font-sans leading-relaxed"
@@ -133,21 +137,26 @@ export default function ChefPage() {
               custom={3}
             >
               <p>
-                With over <strong className="text-charcoal">15 years</strong> in
-                professional kitchens, Chef Marcus brings a rare blend of
-                classical French technique and soulful Southern cuisine to every
-                plate he creates.
+                Shai&apos;s love for diverse cuisine is mixed with a{" "}
+                <strong className="text-charcoal">
+                  modern take on Mediterranean comfort food
+                </strong>{" "}
+                while providing vivacious hospitality and infectious joie de
+                vivre.
               </p>
               <p>
-                After training under world-class mentors and honing his craft at
-                some of Atlanta&apos;s most celebrated restaurants, he founded{" "}
-                <strong className="text-charcoal">The Third Space</strong> as a
-                creative culinary hub where food meets artistry.
+                Shai believes that a chef&apos;s food is a{" "}
+                <strong className="text-charcoal">
+                  culinary direct connection to the farms, shepherds, and
+                  fishermen
+                </strong>{" "}
+                and is concisely displayed on a plate. His dishes are as familiar
+                and comforting as a warm hug from an old friend.
               </p>
               <p>
-                His passion for personalized nutrition and gourmet dining drives
-                everything he does&mdash;turning everyday meals into
-                extraordinary experiences tailored just for you.
+                The Third Space was created to provide an experience with an
+                atmosphere of being at home while giving the feeling of being
+                part of a community you&apos;ve always known and loved.
               </p>
             </motion.div>
           </motion.div>
@@ -175,30 +184,30 @@ export default function ChefPage() {
             variants={fadeUp}
             custom={1}
           >
-            From classical training to your personal kitchen
+            From the farm to your table &mdash; a story of passion and craft
           </motion.p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: <Award className="w-7 h-7" />,
-                title: "Classical Training",
-                text: "Trained in classical French & Southern cuisine under world-renowned chefs",
+                icon: <Leaf className="w-7 h-7" />,
+                title: "Farm Partnership",
+                text: "Partners with local farmers and fishermen, working hand in hand to raise animals and plant seeds on his part of the land",
               },
               {
                 icon: <Star className="w-7 h-7" />,
-                title: "Top Restaurants",
-                text: "Worked at Atlanta\u2019s finest restaurants, earning critical acclaim",
+                title: "No Menu Needed",
+                text: "The chef\u2019s menu consists of the freshest produce and proteins brought on the day of \u2014 pure inspiration",
               },
               {
                 icon: <Utensils className="w-7 h-7" />,
-                title: "The Third Space",
-                text: "Founded The Third Space as a creative culinary hub in Atlanta",
+                title: "Mediterranean Soul",
+                text: "Modern Mediterranean comfort food with diverse global influences, crafted with love",
               },
               {
                 icon: <Heart className="w-7 h-7" />,
-                title: "Personalized Dining",
-                text: "Passion for personalized nutrition and gourmet dining experiences",
+                title: "Community & Home",
+                text: "Creating an atmosphere of being at home \u2014 part of a community you\u2019ve always known and loved",
               },
             ].map((card, i) => (
               <motion.div
@@ -256,13 +265,13 @@ export default function ChefPage() {
               {[
                 {
                   icon: <ChefHat className="w-5 h-5 text-terracotta" />,
-                  label: "Professional Kitchen",
-                  desc: "A fully equipped professional-grade kitchen designed for crafting exceptional meals at scale.",
+                  label: "Farm-to-Table Kitchen",
+                  desc: "Partnering with local farmers and fishermen allows for the freshest produce and proteins, brought on the day of preparation.",
                 },
                 {
                   icon: <Star className="w-5 h-5 text-terracotta" />,
-                  label: "State-of-the-Art Equipment",
-                  desc: "Commercial-grade appliances and tools to ensure every dish meets the highest standard.",
+                  label: "Daily Fresh Menu",
+                  desc: "No set menu \u2014 Chef Shai creates dishes based on what\u2019s freshest and in season that day.",
                 },
                 {
                   icon: <Shield className="w-5 h-5 text-terracotta" />,
@@ -301,7 +310,7 @@ export default function ChefPage() {
                   🍳
                 </span>
                 <span className="text-white/90 font-sans text-sm font-medium mt-2 block">
-                  The Third Space Kitchen
+                  Chef Shai&apos;s Kitchen
                 </span>
               </div>
             </div>
@@ -330,7 +339,7 @@ export default function ChefPage() {
             variants={fadeUp}
             custom={1}
           >
-            &ldquo;Every meal should be an experience&rdquo;
+            &ldquo;Food is a direct connection to the land&rdquo;
           </motion.h2>
           <motion.p
             className="max-w-2xl mx-auto text-goldLight/70 font-sans mb-14"
@@ -340,8 +349,9 @@ export default function ChefPage() {
             variants={fadeUp}
             custom={2}
           >
-            Chef Marcus believes that food is more than sustenance&mdash;it is a
-            craft, a conversation, and a celebration.
+            Chef Shai believes that every dish should feel as familiar and
+            comforting as a warm hug from an old friend &mdash; connecting you
+            directly to the farms, shepherds, and fishermen.
           </motion.p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -349,22 +359,22 @@ export default function ChefPage() {
               {
                 icon: <Leaf className="w-7 h-7" />,
                 title: "Farm-to-Table",
-                text: "Sourcing the freshest local produce and proteins from trusted farms",
+                text: "Partnering with local farmers to source the freshest ingredients each day",
               },
               {
                 icon: <Star className="w-7 h-7" />,
-                title: "Seasonal Ingredients",
-                text: "Menus that celebrate what\u2019s in season for peak flavor and nutrition",
+                title: "Seasonal & Fresh",
+                text: "No set menu \u2014 dishes crafted from what\u2019s freshest and in season",
               },
               {
                 icon: <Heart className="w-7 h-7" />,
-                title: "Custom-Tailored",
-                text: "Every meal is designed around your preferences, goals, and dietary needs",
+                title: "Comfort & Community",
+                text: "An atmosphere of being at home, part of a community you\u2019ve always loved",
               },
               {
                 icon: <Utensils className="w-7 h-7" />,
-                title: "Gourmet Quality",
-                text: "Restaurant-caliber dishes crafted with care and delivered to your door",
+                title: "Mediterranean Meets Modern",
+                text: "Diverse cuisine with a modern take on Mediterranean comfort food",
               },
             ].map((card, i) => (
               <motion.div
@@ -418,11 +428,11 @@ export default function ChefPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
             {[
               "ServSafe Food Protection Manager Certified",
-              "Classical French Culinary Training",
-              "Southern Cuisine Specialist",
+              "Mediterranean & International Cuisine Specialist",
+              "Farm-to-Table Partnership Certified",
               "Nutrition & Dietary Planning",
               "Health & Safety Compliance",
-              "Also featured at The Third Space Atlanta",
+              "Local Farmer & Fishermen Partnership",
             ].map((cred, i) => (
               <motion.div
                 key={cred}
@@ -457,11 +467,12 @@ export default function ChefPage() {
           >
             <MapPin className="w-10 h-10 text-white/80 mx-auto mb-4" />
             <h2 className="font-serif text-3xl sm:text-4xl text-white mb-3">
-              Let Chef Marcus Create Your Next Meal
+              Let Chef Shai Create Your Next Meal
             </h2>
             <p className="text-white/80 font-sans mb-8 max-w-lg mx-auto">
-              Experience personalized gourmet dining crafted just for you, from
-              The Third Space Atlanta kitchen to your table.
+              Experience personalized Mediterranean comfort food crafted just
+              for you, with the freshest ingredients from local farms and
+              fishermen.
             </p>
             <Link
               href="/contact"
