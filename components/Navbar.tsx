@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
@@ -20,6 +21,7 @@ const navLinks = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -34,6 +36,11 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -42,15 +49,15 @@ export default function Navbar() {
           : "bg-cream/80 backdrop-blur-sm"
       }`}
     >
+      {/* Top bar: Logo + Desktop links + Hamburger */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-14 md:h-16">
           {/* Logo */}
           <Link
             href="/"
             className="flex items-center gap-2 group shrink-0"
-            onClick={() => setIsOpen(false)}
           >
-            <span className="text-2xl md:text-3xl" role="img" aria-label="Chef">
+            <span className="text-2xl" role="img" aria-label="Chef">
               👨‍🍳
             </span>
             <span className="font-serif text-lg md:text-xl font-bold text-charcoal tracking-tight">
@@ -61,33 +68,43 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav Links */}
-          <div className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {/* Desktop Nav Links (xl and up) */}
+          <div className="hidden xl:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="relative px-3 py-2 text-sm font-medium text-softBrown hover:text-goldDark transition-colors duration-200 rounded-lg hover:bg-goldLight/15 group"
+                className={`relative px-2.5 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-goldLight/15 group ${
+                  pathname === link.href
+                    ? "text-gold"
+                    : "text-softBrown hover:text-goldDark"
+                }`}
               >
                 {link.label}
-                <span className="absolute bottom-0.5 left-3 right-3 h-0.5 bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-200 origin-left rounded-full" />
+                <span
+                  className={`absolute bottom-0.5 left-2.5 right-2.5 h-0.5 bg-gold rounded-full transition-transform duration-200 origin-left ${
+                    pathname === link.href
+                      ? "scale-x-100"
+                      : "scale-x-0 group-hover:scale-x-100"
+                  }`}
+                />
               </Link>
             ))}
           </div>
 
-          {/* Desktop CTA + Mobile Hamburger */}
-          <div className="flex items-center gap-3">
+          {/* Right side: Order Now + Hamburger */}
+          <div className="flex items-center gap-2">
             <Link
               href="/order"
-              className="hidden lg:inline-flex items-center px-5 py-2.5 bg-gold text-white text-sm font-semibold rounded-full shadow-md shadow-gold/20 hover:bg-goldDark hover:shadow-lg active:scale-95 transition-all duration-200"
+              className="hidden sm:inline-flex items-center px-4 py-2 bg-gold text-white text-sm font-semibold rounded-full shadow-md shadow-gold/20 hover:bg-goldDark hover:shadow-lg active:scale-95 transition-all duration-200"
             >
               Order Now
             </Link>
 
-            {/* Mobile Hamburger Button */}
+            {/* Hamburger (visible below xl) */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-goldLight/15 transition-colors"
+              className="xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-goldLight/15 transition-colors"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
             >
@@ -125,7 +142,28 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Slide-in Menu */}
+      {/* Mobile/Tablet scrollable nav strip (below xl) */}
+      <div className="xl:hidden border-t border-goldLight/20 bg-cream/95 backdrop-blur-md">
+        <div className="overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-1 px-4 py-1.5 min-w-max">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-3 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-all duration-200 ${
+                  pathname === link.href
+                    ? "bg-gold text-white shadow-sm"
+                    : "text-softBrown hover:text-goldDark hover:bg-goldLight/20"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Slide-in Menu (for hamburger) */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -135,7 +173,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 top-16 md:top-20 bg-charcoal/30 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 top-[88px] md:top-[96px] bg-charcoal/30 backdrop-blur-sm xl:hidden"
               onClick={() => setIsOpen(false)}
             />
 
@@ -145,9 +183,9 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="fixed top-16 md:top-20 right-0 bottom-0 w-72 sm:w-80 bg-cream shadow-2xl lg:hidden flex flex-col"
+              className="fixed top-[88px] md:top-[96px] right-0 bottom-0 w-72 sm:w-80 bg-cream shadow-2xl xl:hidden flex flex-col"
             >
-              <div className="flex-1 overflow-y-auto py-6 px-5">
+              <div className="flex-1 overflow-y-auto py-4 px-5">
                 {navLinks.map((link, i) => (
                   <motion.div
                     key={link.href}
@@ -158,7 +196,11 @@ export default function Navbar() {
                     <Link
                       href={link.href}
                       onClick={() => setIsOpen(false)}
-                      className="block px-4 py-3 text-softBrown hover:text-goldDark hover:bg-goldLight/15 rounded-xl font-medium transition-colors duration-200 text-sm"
+                      className={`block px-4 py-3 rounded-xl font-medium transition-colors duration-200 text-sm ${
+                        pathname === link.href
+                          ? "text-gold bg-gold/10"
+                          : "text-softBrown hover:text-goldDark hover:bg-goldLight/15"
+                      }`}
                     >
                       {link.label}
                     </Link>
