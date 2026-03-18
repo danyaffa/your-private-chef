@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const quickLinks = [
@@ -25,13 +25,45 @@ const services = [
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  const [appInstalled, setAppInstalled] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", () => setAppInstalled(true));
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallApp = async () => {
+    if (deferredPrompt && "prompt" in deferredPrompt) {
+      (deferredPrompt as { prompt: () => void }).prompt();
+      setDeferredPrompt(null);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("Failed");
       setSubmitted(true);
       setEmail("");
       setTimeout(() => setSubmitted(false), 4000);
+    } catch {
+      // silently fail for newsletter
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -67,7 +99,7 @@ export default function Footer() {
                 type="submit"
                 className="flex-shrink-0 px-6 py-3 bg-white text-gold font-semibold rounded-full hover:bg-cream active:scale-95 transition-all duration-200 text-sm shadow-md whitespace-nowrap"
               >
-                {submitted ? "Thank You!" : "Get Plan"}
+                {submitted ? "Thank You!" : submitting ? "..." : "Get Plan"}
               </button>
             </form>
           </div>
@@ -160,24 +192,15 @@ export default function Footer() {
               <li className="flex items-center gap-2">
                 <span className="text-gold">📞</span>
                 <a
-                  href="tel:+15551234567"
+                  href="tel:+14243973047"
                   className="hover:text-gold transition-colors duration-200"
                 >
-                  +1 (555) 123-4567
-                </a>
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-gold">✉️</span>
-                <a
-                  href="mailto:hello@yourprivatechef.com"
-                  className="hover:text-gold transition-colors duration-200"
-                >
-                  hello@yourprivatechef.com
+                  +1 (424) 397-3047
                 </a>
               </li>
               <li className="mt-3">
                 <a
-                  href="https://wa.me/15551234567"
+                  href="https://wa.me/14243973047"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-sage/20 text-sageLight text-sm font-medium rounded-full hover:bg-sage/30 transition-all duration-200"
@@ -186,6 +209,17 @@ export default function Footer() {
                   WhatsApp Us
                 </a>
               </li>
+              {!appInstalled && (
+                <li className="mt-3">
+                  <button
+                    onClick={handleInstallApp}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-goldLight text-sm font-medium rounded-full hover:bg-gold/30 active:scale-95 transition-all duration-200 w-full sm:w-auto justify-center"
+                  >
+                    <span>📲</span>
+                    Download the App
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
         </div>

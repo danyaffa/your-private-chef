@@ -4,7 +4,6 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
-  Mail,
   Phone,
   MessageCircle,
   MapPin,
@@ -38,24 +37,17 @@ const scaleIn = {
 
 const contactCards = [
   {
-    icon: <Mail className="w-6 h-6" />,
-    label: "Email",
-    value: "info@yourprivatechef.com",
-    href: "mailto:info@yourprivatechef.com",
-    color: "bg-gold/10 text-gold",
-  },
-  {
     icon: <Phone className="w-6 h-6" />,
     label: "Phone",
-    value: "(404) 555-CHEF",
-    href: "tel:+14045552433",
+    value: "+1 (424) 397-3047",
+    href: "tel:+14243973047",
     color: "bg-terracotta/10 text-terracotta",
   },
   {
     icon: <MessageCircle className="w-6 h-6" />,
     label: "WhatsApp",
-    value: "+1 (404) 555-2433",
-    href: "https://wa.me/14045552433",
+    value: "+1 (424) 397-3047",
+    href: "https://wa.me/14243973047",
     color: "bg-sage/10 text-sage",
   },
   {
@@ -100,6 +92,8 @@ export default function ContactPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -109,9 +103,26 @@ export default function ContactPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Something went wrong.");
+      }
+      setSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to send message.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -157,7 +168,7 @@ export default function ContactPage() {
 
       {/* ── Contact Info Cards ── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 -mt-10 relative z-10">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {contactCards.map((card, i) => (
             <motion.a
               key={card.label}
@@ -308,7 +319,7 @@ export default function ContactPage() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="(404) 555-1234"
+                      placeholder="(424) 397-3047"
                       className="w-full px-4 py-3 rounded-xl border border-goldLight/40 bg-white font-sans text-charcoal placeholder:text-softBrown/40 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold transition-colors"
                     />
                   </div>
@@ -362,15 +373,21 @@ export default function ContactPage() {
                   />
                 </div>
 
+                {/* Error */}
+                {error && (
+                  <p className="text-terracotta text-sm font-sans">{error}</p>
+                )}
+
                 {/* Submit */}
                 <motion.button
                   type="submit"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-terracotta text-white font-sans font-semibold px-8 py-3.5 rounded-full hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  disabled={submitting}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-gold to-terracotta text-white font-sans font-semibold px-8 py-3.5 rounded-full hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Send className="w-4 h-4" />
-                  Send Message
+                  {submitting ? "Sending..." : "Send Message"}
                 </motion.button>
               </motion.form>
             )}
@@ -562,7 +579,7 @@ export default function ContactPage() {
             viewport={{ once: true }}
             variants={scaleIn}
           >
-            <Mail className="w-10 h-10 text-goldLight/80 mx-auto mb-4" />
+            <Phone className="w-10 h-10 text-goldLight/80 mx-auto mb-4" />
             <h2 className="font-serif text-3xl sm:text-4xl text-cream mb-3">
               Ready to Eat Well?
             </h2>
@@ -570,12 +587,24 @@ export default function ContactPage() {
               Whether you have questions or you&rsquo;re ready to start your
               personalized meal plan, Chef Marcus and the team are here for you.
             </p>
-            <a
-              href="mailto:info@yourprivatechef.com"
-              className="inline-block bg-gradient-to-r from-gold to-terracotta text-white font-sans font-semibold px-8 py-3.5 rounded-full hover:shadow-lg hover:scale-[1.02] transition-all"
-            >
-              Email Us Directly
-            </a>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="tel:+14243973047"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-gold to-terracotta text-white font-sans font-semibold px-8 py-3.5 rounded-full hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                <Phone className="w-4 h-4" />
+                Call Us Now
+              </a>
+              <a
+                href="https://wa.me/14243973047"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-sage text-white font-sans font-semibold px-8 py-3.5 rounded-full hover:bg-sageDark hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp Us
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

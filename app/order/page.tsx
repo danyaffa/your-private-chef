@@ -69,6 +69,8 @@ const mealTypes = [
 export default function OrderPage() {
   const [orderType, setOrderType] = useState<OrderType>("one-time");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [form, setForm] = useState<FormData>({
@@ -188,19 +190,45 @@ export default function OrderPage() {
     return Object.keys(errs).length === 0;
   };
 
+  const submitOrder = async () => {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          orderType,
+          total: calculateTotal(),
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Something went wrong.");
+      }
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err: unknown) {
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to submit order."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      submitOrder();
     }
   };
 
   const handleCustomPlan = () => {
     setOrderType("custom");
     if (validate()) {
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      submitOrder();
     }
   };
 
@@ -1050,28 +1078,36 @@ export default function OrderPage() {
                     </>
                   )}
 
+                  {/* Error */}
+                  {submitError && (
+                    <p className="text-terracotta text-sm text-center">{submitError}</p>
+                  )}
+
                   {/* Action Buttons */}
                   <div className="space-y-3">
                     {orderType === "custom" ? (
                       <button
                         type="button"
                         onClick={handleCustomPlan}
-                        className="w-full py-3.5 rounded-xl font-semibold text-white bg-sage hover:bg-sageDark transition-colors shadow-sm"
+                        disabled={submitting}
+                        className="w-full py-3.5 rounded-xl font-semibold text-white bg-sage hover:bg-sageDark transition-colors shadow-sm disabled:opacity-60"
                       >
-                        Request Custom Plan
+                        {submitting ? "Submitting..." : "Request Custom Plan"}
                       </button>
                     ) : (
                       <>
                         <button
                           type="submit"
-                          className="w-full py-3.5 rounded-xl font-semibold text-white bg-gold hover:bg-goldDark transition-colors shadow-sm"
+                          disabled={submitting}
+                          className="w-full py-3.5 rounded-xl font-semibold text-white bg-gold hover:bg-goldDark transition-colors shadow-sm disabled:opacity-60"
                         >
-                          Place Order
+                          {submitting ? "Placing Order..." : "Place Order"}
                         </button>
                         <button
                           type="button"
                           onClick={handleCustomPlan}
-                          className="w-full py-3.5 rounded-xl font-semibold text-sage bg-sage/10 hover:bg-sage/20 transition-colors"
+                          disabled={submitting}
+                          className="w-full py-3.5 rounded-xl font-semibold text-sage bg-sage/10 hover:bg-sage/20 transition-colors disabled:opacity-60"
                         >
                           Request Custom Plan
                         </button>
