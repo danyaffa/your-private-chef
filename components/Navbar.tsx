@@ -10,7 +10,6 @@ const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
-  { href: "/how-it-works", label: "How It Works" },
   { href: "/gallery", label: "Gallery" },
   { href: "/chef", label: "Chef Shai" },
   { href: CALENDLY_URL, label: "Book", external: true },
