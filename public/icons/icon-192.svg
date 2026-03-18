@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="28.799999999999997" fill="#C8986E"/>
+  <text x="50%" y="38%" text-anchor="middle" font-family="Georgia,serif" font-size="34.56" fill="#FFF8F0" font-weight="bold">YOUR</text>
+  <text x="50%" y="55%" text-anchor="middle" font-family="Georgia,serif" font-size="28.799999999999997" fill="#FFF8F0">PRIVATE</text>
+  <text x="50%" y="72%" text-anchor="middle" font-family="Georgia,serif" font-size="42.24" fill="#FFF8F0" font-weight="bold">CHEF</text>
+  <line x1="48" y1="153.60000000000002" x2="144" y2="153.60000000000002" stroke="#FFF8F0" stroke-width="1.92"/>
+</svg>
