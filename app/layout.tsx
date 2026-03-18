@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import CouponPopup from "../components/CouponPopup";
 
 export const metadata: Metadata = {
   title: "Your Private Chef — Premium Meals Delivered",
@@ -50,6 +51,7 @@ export default function RootLayout({
         <Navbar />
         <main>{children}</main>
         <Footer />
+        <CouponPopup />
       </body>
     </html>
   );
