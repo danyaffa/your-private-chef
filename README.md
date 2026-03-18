@@ -1,15 +1,13 @@
 # Your Private Chef
 
-Premium chef-prepared meal delivery platform.
+Premium chef-prepared meal delivery website.
 
 ## Stack
 - Next.js 14
 - Tailwind CSS
 - TypeScript
 
-## Run
+## Run locally
+```bash
 npm install
 npm run dev
-
-## Deploy
-Vercel
