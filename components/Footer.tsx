@@ -3,25 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const quickLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "How It Works", href: "/how-it-works" },
-  { label: "Menu", href: "/menu" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Order", href: "/order" },
-  { label: "Contact", href: "/contact" },
-];
-
-const services = [
-  "Private Dining",
-  "Meal Prep Plans",
-  "Catering Events",
-  "AI Meal Builder",
-  "Custom Nutrition Plans",
-  "Cooking Classes",
-];
-
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -71,15 +52,14 @@ export default function Footer() {
     <footer className="bg-charcoal text-cream">
       {/* Email Capture Banner */}
       <div className="bg-gradient-to-r from-goldDark via-gold to-goldDark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-center md:text-left">
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-white">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-white">
                 Get Your Custom Meal Plan
               </h3>
-              <p className="mt-1 text-white/80 text-sm sm:text-base">
-                Personalized nutrition delivered to your door. Sign up for a
-                free consultation.
+              <p className="mt-1 text-white/80 text-sm">
+                Personalized nutrition delivered to your door.
               </p>
             </div>
 
@@ -93,11 +73,11 @@ export default function Footer() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="Enter your email"
-                className="flex-1 md:w-72 px-4 py-3 rounded-full bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/25 transition-all text-sm"
+                className="flex-1 md:w-64 px-4 py-2.5 rounded-full bg-white/20 text-white placeholder-white/60 border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/50 focus:bg-white/25 transition-all text-sm"
               />
               <button
                 type="submit"
-                className="flex-shrink-0 px-6 py-3 bg-white text-gold font-semibold rounded-full hover:bg-cream active:scale-95 transition-all duration-200 text-sm shadow-md whitespace-nowrap"
+                className="flex-shrink-0 px-5 py-2.5 bg-white text-gold font-semibold rounded-full hover:bg-cream active:scale-95 transition-all duration-200 text-sm shadow-md whitespace-nowrap"
               >
                 {submitted ? "Thank You!" : submitting ? "..." : "Get Plan"}
               </button>
@@ -107,22 +87,20 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12">
           {/* About Column */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
+            <div className="flex items-center gap-2 mb-3">
               <span className="text-2xl">👨‍🍳</span>
-              <span className="font-serif text-xl font-bold text-goldLight">
+              <span className="font-serif text-lg font-bold text-goldLight">
                 Your Private Chef
               </span>
             </div>
-            <p className="text-cream/70 text-sm leading-relaxed mb-6">
-              Premium, personalized meals crafted with love and expertise. We
-              bring the fine dining experience to your home with farm-fresh
-              ingredients and world-class culinary artistry.
+            <p className="text-cream/70 text-sm leading-relaxed mb-4">
+              Premium, personalized meals crafted with love and expertise.
+              Farm-fresh ingredients and world-class culinary artistry.
             </p>
-
             {/* Social Icons */}
             <div className="flex gap-3">
               {[
@@ -134,7 +112,7 @@ export default function Footer() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-cream/10 text-cream/70 text-xs font-bold hover:bg-gold hover:text-white transition-all duration-200"
+                  className="w-8 h-8 flex items-center justify-center rounded-full bg-cream/10 text-cream/70 text-xs font-bold hover:bg-gold hover:text-white transition-all duration-200"
                 >
                   {label}
                 </a>
@@ -142,53 +120,30 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-serif text-lg font-semibold text-goldLight mb-4">
-              Quick Links
-            </h4>
-            <ul className="space-y-2.5">
-              {quickLinks.map(({ label, href }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    className="text-sm text-cream/70 hover:text-gold transition-colors duration-200"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Services */}
           <div>
-            <h4 className="font-serif text-lg font-semibold text-goldLight mb-4">
+            <h4 className="font-serif text-base font-semibold text-goldLight mb-3">
               Services
             </h4>
-            <ul className="space-y-2.5">
-              {services.map((service) => (
-                <li key={service} className="text-sm text-cream/70">
-                  {service}
-                </li>
+            <ul className="space-y-1.5 text-sm text-cream/70">
+              {[
+                "Private Dining",
+                "Meal Prep Plans",
+                "Catering Events",
+                "AI Meal Builder",
+                "Custom Nutrition Plans",
+              ].map((service) => (
+                <li key={service}>{service}</li>
               ))}
             </ul>
           </div>
 
           {/* Contact */}
           <div>
-            <h4 className="font-serif text-lg font-semibold text-goldLight mb-4">
+            <h4 className="font-serif text-base font-semibold text-goldLight mb-3">
               Contact
             </h4>
-            <ul className="space-y-3 text-sm text-cream/70">
-              <li className="flex items-start gap-2">
-                <span className="text-gold mt-0.5">📍</span>
-                <span>
-                  123 Culinary Lane,
-                  <br />
-                  Gourmet City, GC 10001
-                </span>
-              </li>
+            <ul className="space-y-2.5 text-sm text-cream/70">
               <li className="flex items-center gap-2">
                 <span className="text-gold">📞</span>
                 <a
@@ -198,22 +153,22 @@ export default function Footer() {
                   +1 (424) 397-3047
                 </a>
               </li>
-              <li className="mt-3">
+              <li className="flex gap-2 mt-2">
                 <a
                   href="https://wa.me/14243973047"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-sage/20 text-sageLight text-sm font-medium rounded-full hover:bg-sage/30 transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-sage/20 text-sageLight text-sm font-medium rounded-full hover:bg-sage/30 transition-all duration-200"
                 >
                   <span>💬</span>
                   WhatsApp Us
                 </a>
               </li>
               {!appInstalled && (
-                <li className="mt-3">
+                <li className="mt-2">
                   <button
                     onClick={handleInstallApp}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gold/20 text-goldLight text-sm font-medium rounded-full hover:bg-gold/30 active:scale-95 transition-all duration-200 w-full sm:w-auto justify-center"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold/20 text-goldLight text-sm font-medium rounded-full hover:bg-gold/30 active:scale-95 transition-all duration-200"
                   >
                     <span>📲</span>
                     Download the App
@@ -227,7 +182,7 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-cream/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-cream/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-cream/50">
           <p>
             &copy; {new Date().getFullYear()} Your Private Chef. All rights
             reserved.

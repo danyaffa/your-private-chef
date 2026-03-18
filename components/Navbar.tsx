@@ -13,7 +13,8 @@ const navLinks = [
   { href: "/chef", label: "Chef" },
   { href: "/order", label: "Order" },
   { href: "/contact", label: "Contact" },
-  { href: "/ai-meal-builder", label: "AI Meal Builder" },
+  { href: "/meal-builder", label: "Meal Builder" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export default function Navbar() {

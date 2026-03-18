@@ -49,7 +49,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans text-charcoal bg-cream antialiased">
         <Navbar />
-        <main>{children}</main>
+        <main className="pt-16 md:pt-20">{children}</main>
         <Footer />
         <CouponPopup />
       </body>
