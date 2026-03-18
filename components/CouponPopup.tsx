@@ -11,17 +11,12 @@ export default function CouponPopup() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    const dismissed = localStorage.getItem("coupon_dismissed");
-    const claimed = localStorage.getItem("coupon_claimed");
-    if (dismissed || claimed) return;
-
-    const timer = setTimeout(() => setShow(true), 5000);
+    const timer = setTimeout(() => setShow(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
   const handleClose = () => {
     setShow(false);
-    localStorage.setItem("coupon_dismissed", "1");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +30,6 @@ export default function CouponPopup() {
         body: JSON.stringify(form),
       });
       setSubmitted(true);
-      localStorage.setItem("coupon_claimed", "1");
     } catch {
       // fail silently
     } finally {

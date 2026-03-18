@@ -236,8 +236,7 @@ export default function ChefPage() {
 
       {/* ── Kitchen Section ── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* Text */}
+        <div className="max-w-3xl">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -294,26 +293,6 @@ export default function ChefPage() {
                 </div>
               ))}
             </motion.div>
-          </motion.div>
-
-          {/* Kitchen Visual */}
-          <motion.div
-            className="relative"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={scaleIn}
-          >
-            <div className="w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-goldLight via-gold to-terracotta flex items-center justify-center">
-              <div className="text-center">
-                <span className="text-[80px] sm:text-[100px] block select-none">
-                  🍳
-                </span>
-                <span className="text-white/90 font-sans text-sm font-medium mt-2 block">
-                  Chef Shai&apos;s Kitchen
-                </span>
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>
