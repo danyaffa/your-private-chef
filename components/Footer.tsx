@@ -66,13 +66,16 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               {[
-                { label: "IG", href: "#" },
-                { label: "FB", href: "#" },
-                { label: "TW", href: "#" },
+                { label: "IG", href: "https://instagram.com/third.space.atlanta/" },
+                { label: "FB", href: "https://facebook.com/foodandstuff123/" },
+                { label: "TT", href: "https://tiktok.com/@thirdspaceatl" },
+                { label: "LI", href: "https://linkedin.com/company/thethirdspaceatlanta/" },
               ].map(({ label, href }) => (
                 <a
                   key={label}
                   href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="w-9 h-9 flex items-center justify-center border border-darkBorder text-cream/50 text-xs font-bold hover:border-gold hover:text-gold transition-all duration-200"
                 >
