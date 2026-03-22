@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
 import {
   ChefHat,
@@ -453,12 +452,14 @@ export default function ChefPage() {
               for you, with the freshest ingredients from local farms and
               fishermen.
             </p>
-            <Link
-              href="/contact"
+            <a
+              href="https://calendly.com/itai-leff/15min?month=2026-03Meet"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-white text-charcoal font-sans font-semibold px-8 py-3.5 rounded-full hover:bg-cream transition-colors shadow-lg"
             >
-              Get Started Today
-            </Link>
+              Talk with the Chef
+            </a>
           </motion.div>
         </div>
       </section>

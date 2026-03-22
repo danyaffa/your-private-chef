@@ -8,7 +8,6 @@ const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
 
 const foodPhotos = [
   "/food-photos/0203DA92-08DA-4CD5-9F13-169870BBB71B.JPG",
-  "/food-photos/10664B13-450C-4728-BEDE-F9087E2B335B.JPG",
   "/food-photos/4D9736A4-B0EF-45F9-A571-D699521FF774.JPG",
   "/food-photos/74B6B138-A94D-44CE-9023-378C9AB53565.JPG",
   "/food-photos/8967B85D-8AA1-4C0D-B806-12B0B8E5C867.JPG",
@@ -131,7 +130,7 @@ export default function GalleryPage() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
           >
-            Book Time with Shai
+            Book Time With The Chef
           </a>
         </motion.div>
       </section>

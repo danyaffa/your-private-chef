@@ -140,3 +140,31 @@ input:focus, textarea:focus, select:focus {
   font-variant: small-caps;
   letter-spacing: 0.25em;
 }
+
+/* Mobile-friendly touch targets */
+@media (max-width: 640px) {
+  a, button {
+    min-height: 44px;
+  }
+
+  /* Prevent horizontal overflow on mobile */
+  main {
+    overflow-x: hidden;
+  }
+
+  /* Better text sizing on small screens */
+  .font-serif {
+    word-break: break-word;
+  }
+}
+
+/* Smooth transitions for dynamic feel */
+img {
+  transition: opacity 0.3s ease;
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
