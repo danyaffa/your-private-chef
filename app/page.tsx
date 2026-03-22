@@ -29,7 +29,6 @@ const THIRD_SPACE_URL = "https://www.thethirdspaceatlanta.com";
 
 const foodPhotos = [
   "0203DA92-08DA-4CD5-9F13-169870BBB71B.JPG",
-  "10664B13-450C-4728-BEDE-F9087E2B335B.JPG",
   "4D9736A4-B0EF-45F9-A571-D699521FF774.JPG",
   "74B6B138-A94D-44CE-9023-378C9AB53565.JPG",
   "8967B85D-8AA1-4C0D-B806-12B0B8E5C867.JPG",
@@ -43,19 +42,19 @@ const foodPhotos = [
 const steps = [
   {
     num: 1,
-    icon: "📞",
+    icon: "",
     title: "Book a Call",
     desc: "Schedule a free 15-minute consultation. We\u2019ll learn about your preferences, dietary needs, and schedule.",
   },
   {
     num: 2,
-    icon: "👨‍🍳",
-    title: "Meet Chef Shai",
+    icon: "",
+    title: "Meet the Chef",
     desc: "Join Shai at The Third Space Restaurant (or via Zoom) for a personal tasting and to plan your custom menu.",
   },
   {
     num: 3,
-    icon: "🍽️",
+    icon: "",
     title: "Fresh to Your Door",
     desc: "Receive your personally crafted meals delivered weekly — plated and ready to enjoy.",
   },
@@ -88,7 +87,7 @@ export default function HomePage() {
       {/* ============================================================ */}
       {/*  HERO SECTION                                                */}
       {/* ============================================================ */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[60vh] sm:min-h-[80vh] flex items-center overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
@@ -135,9 +134,9 @@ export default function HomePage() {
                 href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg tracking-wider uppercase transition-all duration-300"
               >
-                Book Time with Shai
+                Book Time With The Chef
               </a>
             </motion.div>
           </motion.div>
@@ -226,7 +225,7 @@ export default function HomePage() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={staggerContainer}
-            className="grid sm:grid-cols-3 gap-8 lg:gap-12"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-8 lg:gap-12"
           >
             {steps.map((step, i) => (
               <motion.div
@@ -244,8 +243,6 @@ export default function HomePage() {
                 <div className="mx-auto w-20 h-20 border border-gold/40 flex items-center justify-center text-gold text-2xl font-serif font-bold mb-6 relative z-10 group-hover:bg-gold/10 transition-all duration-300">
                   {step.num}
                 </div>
-
-                <span className="text-3xl block mb-4">{step.icon}</span>
 
                 <h3 className="font-serif text-xl font-semibold text-cream mb-3 tracking-wide">
                   {step.title}
@@ -292,9 +289,9 @@ export default function HomePage() {
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg tracking-wider uppercase transition-all duration-300"
             >
-              Book Time with Shai
+              Book Time With The Chef
             </a>
           </motion.div>
         </div>
@@ -381,7 +378,7 @@ export default function HomePage() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={staggerContainer}
-            className="columns-2 md:columns-3 gap-4 space-y-4"
+            className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4"
           >
             {foodPhotos.map((photo, i) => (
               <motion.div
@@ -417,9 +414,9 @@ export default function HomePage() {
               href={CALENDLY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+              className="inline-flex items-center gap-2 border border-gold/60 text-gold hover:bg-gold hover:text-darkBg font-medium px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg tracking-wider uppercase transition-all duration-300"
             >
-              Book Time with Shai
+              Book Time With The Chef
             </a>
           </motion.div>
         </div>
@@ -467,9 +464,9 @@ export default function HomePage() {
                 href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-10 py-4 text-lg tracking-wider uppercase transition-all duration-300"
+                className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream hover:bg-cream/10 font-medium px-6 sm:px-10 py-3 sm:py-4 text-base sm:text-lg tracking-wider uppercase transition-all duration-300"
               >
-                Book Time with Shai
+                Book Time With The Chef
               </a>
             </motion.div>
           </motion.div>

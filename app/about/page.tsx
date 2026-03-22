@@ -1,15 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
 import {
-  Leaf,
-  Heart,
   Sparkles,
-  User,
-  ChefHat,
-  ShieldCheck,
   Apple,
   UtensilsCrossed,
   ArrowRight,
@@ -32,25 +26,21 @@ const stagger = {
 
 const values = [
   {
-    icon: <ShieldCheck className="w-8 h-8" />,
     title: "Quality",
     description:
       "Every ingredient is hand-selected for freshness and flavor. We never cut corners.",
   },
   {
-    icon: <Leaf className="w-8 h-8" />,
     title: "Freshness",
     description:
       "Meals are prepared the same day they're delivered — never frozen, never reheated.",
   },
   {
-    icon: <User className="w-8 h-8" />,
     title: "Personalization",
     description:
       "Your meals are built around your dietary needs, goals, and taste preferences.",
   },
   {
-    icon: <Heart className="w-8 h-8" />,
     title: "Health",
     description:
       "Nutrient-dense, balanced meals that support your wellness journey every day.",
@@ -125,7 +115,7 @@ export default function AboutPage() {
             >
               <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-xl relative">
                 <Image
-                  src="/About.png"
+                  src="/gallery/31D54103-AF42-49F2-A4B2-C1A50D48351E.JPG"
                   alt="Your Private Chef"
                   fill
                   className="object-cover"
@@ -360,9 +350,6 @@ export default function AboutPage() {
                 transition={{ duration: 0.5, delay: i * 0.12 }}
                 className="bg-white/5 backdrop-blur rounded-2xl p-7 border border-white/10 text-center card-hover"
               >
-                <div className="w-14 h-14 mx-auto rounded-xl bg-gold/15 flex items-center justify-center text-goldLight mb-5">
-                  {v.icon}
-                </div>
                 <h3 className="font-serif text-xl text-white mb-2">
                   {v.title}
                 </h3>
@@ -392,12 +379,14 @@ export default function AboutPage() {
               Experience restaurant-quality meals made just for you — delivered
               fresh to your door.
             </p>
-            <Link
-              href="/order"
+            <a
+              href="https://calendly.com/itai-leff/15min?month=2026-03Meet"
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 text-lg"
             >
-              Order Now <ArrowRight className="w-5 h-5" />
-            </Link>
+              Book a Consultation <ArrowRight className="w-5 h-5" />
+            </a>
           </motion.div>
         </div>
       </section>

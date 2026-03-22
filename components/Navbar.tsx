@@ -106,7 +106,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center px-5 py-2.5 border border-gold/60 text-gold text-sm font-medium tracking-wider uppercase hover:bg-gold hover:text-darkBg transition-all duration-300"
             >
-              Book Time with Shai
+              Book Time With The Chef
             </a>
 
             {/* Hamburger (visible below xl) */}
@@ -254,7 +254,7 @@ export default function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className="block w-full text-center px-5 py-3 border border-gold/60 text-gold font-medium tracking-wider uppercase hover:bg-gold hover:text-darkBg transition-all duration-300"
                 >
-                  Book Time with Shai
+                  Book Time With The Chef
                 </a>
               </motion.div>
             </motion.div>
