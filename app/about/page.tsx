@@ -380,7 +380,7 @@ export default function AboutPage() {
               fresh to your door.
             </p>
             <a
-              href="https://calendly.com/itai-leff/15min?month=2026-03Meet"
+              href="https://calendly.com/itai-leff/15min"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary inline-flex items-center gap-2 text-lg"
