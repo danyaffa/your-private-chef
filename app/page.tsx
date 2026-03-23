@@ -24,7 +24,7 @@ const staggerContainer = {
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
 /* ------------------------------------------------------------------ */
-const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
+const CALENDLY_URL = "https://calendly.com/itai-leff/15min";
 const THIRD_SPACE_URL = "https://www.thethirdspaceatlanta.com";
 
 const foodPhotos = [

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
-const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
+const CALENDLY_URL = "https://calendly.com/itai-leff/15min";
 
 const navLinks = [
   { href: "/", label: "Home" },

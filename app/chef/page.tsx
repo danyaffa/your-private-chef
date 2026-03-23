@@ -453,7 +453,7 @@ export default function ChefPage() {
               fishermen.
             </p>
             <a
-              href="https://calendly.com/itai-leff/15min?month=2026-03Meet"
+              href="https://calendly.com/itai-leff/15min"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-white text-charcoal font-sans font-semibold px-8 py-3.5 rounded-full hover:bg-cream transition-colors shadow-lg"

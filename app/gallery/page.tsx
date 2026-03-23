@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-const CALENDLY_URL = "https://calendly.com/itai-leff/15min?month=2026-03Meet";
+const CALENDLY_URL = "https://calendly.com/itai-leff/15min";
 
 const foodPhotos = [
   "/food-photos/0203DA92-08DA-4CD5-9F13-169870BBB71B.JPG",
