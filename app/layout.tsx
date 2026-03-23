@@ -22,6 +22,13 @@ export const metadata: Metadata = {
     "diet meal delivery",
     "fresh meals delivered",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   manifest: "/manifest.json",
   openGraph: {
     title: "Your Private Chef — Premium Meals Delivered",
@@ -44,6 +51,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#C8986E" />
       </head>
