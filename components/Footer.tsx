@@ -107,6 +107,14 @@ export default function Footer() {
               </li>
               <li>
                 <a
+                  href="mailto:eat@chefprepforyou.com"
+                  className="hover:text-gold transition-colors duration-200"
+                >
+                  eat@chefprepforyou.com
+                </a>
+              </li>
+              <li>
+                <a
                   href="https://wa.me/14243973047"
                   target="_blank"
                   rel="noopener noreferrer"
