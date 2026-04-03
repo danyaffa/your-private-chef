@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/about", label: "About Us" },
   { href: "/gallery", label: "Gallery" },
   { href: "/chef", label: "Chef Shai" },
+  { href: "/contact", label: "Contact" },
   { href: CALENDLY_URL, label: "Book", external: true },
   { href: "/admin", label: "Admin" },
 ];

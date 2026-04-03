@@ -71,6 +71,7 @@ export default function Footer() {
                 { label: "About Us", href: "/about" },
                 { label: "Gallery", href: "/gallery" },
                 { label: "Chef Shai", href: "/chef" },
+                { label: "Contact", href: "/contact" },
               ].map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="hover:text-gold transition-colors duration-200">
