@@ -14,7 +14,6 @@ const navLinks = [
   { href: "/chef", label: "Chef Shai" },
   { href: "/contact", label: "Contact" },
   { href: CALENDLY_URL, label: "Book", external: true },
-  { href: "/admin", label: "Admin" },
 ];
 
 export default function Navbar() {
@@ -59,46 +58,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Nav Links (xl and up) */}
-          <div className="hidden xl:flex items-center gap-1">
-            {navLinks.map((link) => {
-              if (link.external) {
-                return (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="relative px-3 py-2 text-sm font-medium tracking-wider uppercase transition-colors duration-200 hover:text-gold text-cream/70"
-                  >
-                    {link.label}
-                    <span className="absolute bottom-0.5 left-3 right-3 h-[1px] bg-gold rounded-full transition-transform duration-200 origin-left scale-x-0 group-hover:scale-x-100" />
-                  </a>
-                );
-              }
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative px-3 py-2 text-sm font-medium tracking-wider uppercase transition-colors duration-200 group ${
-                    pathname === link.href
-                      ? "text-gold"
-                      : "text-cream/70 hover:text-gold"
-                  }`}
-                >
-                  {link.label}
-                  <span
-                    className={`absolute bottom-0.5 left-3 right-3 h-[1px] bg-gold rounded-full transition-transform duration-200 origin-left ${
-                      pathname === link.href
-                        ? "scale-x-100"
-                        : "scale-x-0 group-hover:scale-x-100"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-          </div>
-
           {/* Right side: Book CTA + Hamburger */}
           <div className="flex items-center gap-3">
             <a
@@ -110,10 +69,10 @@ export default function Navbar() {
               Book Time With The Chef
             </a>
 
-            {/* Hamburger (visible below xl) */}
+            {/* Hamburger */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="xl:hidden relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-cream/10 transition-colors"
+              className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-cream/10 transition-colors"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
             >
@@ -151,8 +110,8 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile/Tablet scrollable nav strip (below xl) */}
-      <div className="xl:hidden border-t border-darkBorder bg-darkBg/95 backdrop-blur-md">
+      {/* Scrollable nav strip */}
+      <div className="border-t border-darkBorder bg-darkBg/95 backdrop-blur-md">
         <div className="overflow-x-auto scrollbar-hide">
           <div className="flex items-center gap-1 px-4 py-1.5 min-w-max">
             {navLinks.map((link) => {
@@ -196,7 +155,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 top-[88px] md:top-[104px] bg-black/60 backdrop-blur-sm xl:hidden"
+              className="fixed inset-0 top-[88px] md:top-[104px] bg-black/60 backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
 
@@ -205,7 +164,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="fixed top-[88px] md:top-[104px] right-0 bottom-0 w-72 sm:w-80 bg-darkBg shadow-2xl xl:hidden flex flex-col border-l border-darkBorder"
+              className="fixed top-[88px] md:top-[104px] right-0 bottom-0 w-72 sm:w-80 bg-darkBg shadow-2xl flex flex-col border-l border-darkBorder"
             >
               <div className="flex-1 overflow-y-auto py-4 px-5">
                 {navLinks.map((link, i) => (

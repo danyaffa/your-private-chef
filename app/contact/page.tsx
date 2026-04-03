@@ -22,14 +22,13 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
-    subject: "",
     message: "",
   });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -52,7 +51,7 @@ export default function ContactPage() {
       }
 
       setStatus("success");
-      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+      setForm({ name: "", email: "", phone: "", message: "" });
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : "Failed to send message.");
@@ -243,47 +242,22 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label
-                        htmlFor="phone"
-                        className="block text-xs font-semibold uppercase tracking-wider text-charcoal/50 mb-2"
-                      >
-                        Phone
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={form.phone}
-                        onChange={handleChange}
-                        placeholder="(555) 123-4567"
-                        className="w-full px-4 py-3 rounded-xl border border-goldLight/30 bg-white text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="subject"
-                        className="block text-xs font-semibold uppercase tracking-wider text-charcoal/50 mb-2"
-                      >
-                        Subject
-                      </label>
-                      <select
-                        id="subject"
-                        name="subject"
-                        value={form.subject}
-                        onChange={handleChange}
-                        className="w-full px-4 py-3 rounded-xl border border-goldLight/30 bg-white text-charcoal focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200"
-                      >
-                        <option value="">Select a topic</option>
-                        <option value="General Inquiry">General Inquiry</option>
-                        <option value="Weekly Meal Prep">Weekly Meal Prep</option>
-                        <option value="Private Event">Private Event</option>
-                        <option value="Dietary Questions">Dietary Questions</option>
-                        <option value="Pricing">Pricing</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="block text-xs font-semibold uppercase tracking-wider text-charcoal/50 mb-2"
+                    >
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={form.phone}
+                      onChange={handleChange}
+                      placeholder="(555) 123-4567"
+                      className="w-full px-4 py-3 rounded-xl border border-goldLight/30 bg-white text-charcoal placeholder:text-charcoal/30 focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200"
+                    />
                   </div>
 
                   <div>
