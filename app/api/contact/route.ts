@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminDb } from "@/lib/firebase-admin";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
 
-    const { name, email, phone, subject, message } = data;
+    const { name, email, phone, message } = data;
 
     if (!name || !email || !message) {
       return NextResponse.json(
@@ -20,20 +20,26 @@ export async function POST(req: NextRequest) {
       name,
       email,
       phone: phone || "",
-      subject: subject || "",
       message,
       createdAt: new Date().toISOString(),
       status: "new",
     });
 
-    // Send email notification via Resend
+    // Send email notification via Gmail SMTP
     const contactEmail = process.env.CONTACT_EMAIL || "eat@chefprepforyou.com";
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
-    await resend.emails.send({
-      from: "Your Private Chef <onboarding@resend.dev>",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Your Private Chef" <${process.env.GMAIL_USER}>`,
       to: contactEmail,
-      subject: `New Contact: ${subject || "General Inquiry"} — from ${name}`,
+      subject: `New Contact Form Message from ${name}`,
       replyTo: email,
       html: `
         <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1C1C1C;">
@@ -54,10 +60,6 @@ export async function POST(req: NextRequest) {
               ${phone ? `<tr>
                 <td style="padding: 8px 0; color: #8B7355; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; vertical-align: top;">Phone</td>
                 <td style="padding: 8px 0; color: #1C1C1C; font-size: 15px;"><a href="tel:${phone}" style="color: #C8986E;">${phone}</a></td>
-              </tr>` : ""}
-              ${subject ? `<tr>
-                <td style="padding: 8px 0; color: #8B7355; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; vertical-align: top;">Subject</td>
-                <td style="padding: 8px 0; color: #1C1C1C; font-size: 15px;">${subject}</td>
               </tr>` : ""}
             </table>
             <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; border-left: 3px solid #C8986E;">
