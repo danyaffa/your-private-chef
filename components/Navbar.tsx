@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 
 const CALENDLY_URL = "https://calendly.com/itai-leff/15min";
 
@@ -17,7 +16,6 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -26,17 +24,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   return (
     <nav
@@ -58,62 +45,22 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Right side: Book CTA + Hamburger */}
-          <div className="flex items-center gap-3">
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center px-5 py-2.5 border border-gold/60 text-gold text-sm font-medium tracking-wider uppercase hover:bg-gold hover:text-darkBg transition-all duration-300"
-            >
-              Book Time With The Chef
-            </a>
-
-            {/* Hamburger */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="relative w-10 h-10 flex items-center justify-center rounded-lg hover:bg-cream/10 transition-colors"
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
-            >
-              <div className="w-6 h-5 relative flex flex-col justify-between">
-                <motion.span
-                  animate={
-                    isOpen
-                      ? { rotate: 45, y: 9, backgroundColor: "#C8986E" }
-                      : { rotate: 0, y: 0, backgroundColor: "#F5F0EB" }
-                  }
-                  transition={{ duration: 0.3 }}
-                  className="block w-full h-[1px] rounded-full origin-center"
-                />
-                <motion.span
-                  animate={
-                    isOpen
-                      ? { opacity: 0, scaleX: 0 }
-                      : { opacity: 1, scaleX: 1 }
-                  }
-                  transition={{ duration: 0.2 }}
-                  className="block w-full h-[1px] bg-cream rounded-full"
-                />
-                <motion.span
-                  animate={
-                    isOpen
-                      ? { rotate: -45, y: -9, backgroundColor: "#C8986E" }
-                      : { rotate: 0, y: 0, backgroundColor: "#F5F0EB" }
-                  }
-                  transition={{ duration: 0.3 }}
-                  className="block w-full h-[1px] rounded-full origin-center"
-                />
-              </div>
-            </button>
-          </div>
+          {/* Book CTA */}
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center px-5 py-2.5 border border-gold/60 text-gold text-sm font-medium tracking-wider uppercase hover:bg-gold hover:text-darkBg transition-all duration-300"
+          >
+            Book Time With The Chef
+          </a>
         </div>
       </div>
 
-      {/* Scrollable nav strip */}
+      {/* Centered nav links strip */}
       <div className="border-t border-darkBorder bg-darkBg/95 backdrop-blur-md">
         <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex items-center gap-1 px-4 py-1.5 min-w-max">
+          <div className="flex items-center justify-center gap-1 px-4 py-1.5">
             {navLinks.map((link) => {
               if (link.external) {
                 return (
@@ -145,82 +92,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-
-      {/* Mobile Slide-in Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="fixed inset-0 top-[88px] md:top-[104px] bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsOpen(false)}
-            />
-
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 260 }}
-              className="fixed top-[88px] md:top-[104px] right-0 bottom-0 w-72 sm:w-80 bg-darkBg shadow-2xl flex flex-col border-l border-darkBorder"
-            >
-              <div className="flex-1 overflow-y-auto py-4 px-5">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.href}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.04 }}
-                  >
-                    {link.external ? (
-                      <a
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setIsOpen(false)}
-                        className="block px-4 py-3 rounded-lg font-medium tracking-wider uppercase transition-colors duration-200 text-sm text-cream/60 hover:text-gold hover:bg-cream/5"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`block px-4 py-3 rounded-lg font-medium tracking-wider uppercase transition-colors duration-200 text-sm ${
-                          pathname === link.href
-                            ? "text-gold bg-gold/10"
-                            : "text-cream/60 hover:text-gold hover:bg-cream/5"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: navLinks.length * 0.04 + 0.1 }}
-                className="p-5 border-t border-darkBorder"
-              >
-                <a
-                  href={CALENDLY_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => setIsOpen(false)}
-                  className="block w-full text-center px-5 py-3 border border-gold/60 text-gold font-medium tracking-wider uppercase hover:bg-gold hover:text-darkBg transition-all duration-300"
-                >
-                  Book Time With The Chef
-                </a>
-              </motion.div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
     </nav>
   );
 }
