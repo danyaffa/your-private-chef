@@ -108,12 +108,12 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
-                  href="mailto:eat@chefprepforyou.com"
+                <Link
+                  href="/contact"
                   className="hover:text-gold transition-colors duration-200"
                 >
                   eat@chefprepforyou.com
-                </a>
+                </Link>
               </li>
               <li>
                 <a
